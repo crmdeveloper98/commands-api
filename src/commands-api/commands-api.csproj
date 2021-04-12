@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>commands_api</RootNamespace>
+    <UserSecretsId>0bcd96d3-822a-469b-a24b-cc1f3f20d7d8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
