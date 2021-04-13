@@ -1,3 +1,4 @@
+using System;
 using commands_api.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AutoMapper;
+using Newtonsoft.Json.Serialization;
 
 namespace commands_api
 {
@@ -29,8 +32,13 @@ namespace commands_api
 
             services.AddDbContext<CommandContext>(options => options.UseSqlServer(builder.ConnectionString));
 
-            services.AddControllers();
-            // services.AddScoped<ICommandAPIRepo, MockCommandAPIRepo>();
+            services.AddControllers().AddNewtonsoftJson(s =>
+            {
+                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddScoped<ICommandAPIRepo, SqlCommandAPIRepo>();
         }
 
