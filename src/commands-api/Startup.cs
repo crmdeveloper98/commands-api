@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace commands_api
 {
@@ -32,6 +33,12 @@ namespace commands_api
 
             services.AddDbContext<CommandContext>(options => options.UseSqlServer(builder.ConnectionString));
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+            {
+                opt.Audience = Configuration["ResourceId"];
+                opt.Authority = $"{Configuration["Instance"]}{Configuration["TenantId"]}";
+            });            
+
             services.AddControllers().AddNewtonsoftJson(s =>
             {
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -53,6 +60,9 @@ namespace commands_api
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -3,12 +3,14 @@ using AutoMapper;
 using commands_api.Data;
 using commands_api.Dtos;
 using commands_api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace commands_api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CommandsController : ControllerBase
@@ -42,7 +44,7 @@ namespace commands_api.Controllers
             var commandItems = _repository.GetAllCommands();
             return Ok(_mapper.Map<IEnumerable<CommandReadDto>>(commandItems));
         }
-
+        
         [HttpGet("{id}", Name="GetCommandById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
